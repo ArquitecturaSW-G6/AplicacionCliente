@@ -16,7 +16,12 @@ import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
@@ -39,14 +44,15 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-fun crearTurno(context: android.content.Context) {
+fun crearTurno(context: android.content.Context, nombre: String) {
     // Aquí pondrías la lógica para consumir el servicio REST o enviar mensaje al backend.
-    Toast.makeText(context, "Turno solicitado correctamente", Toast.LENGTH_SHORT).show()
+    Toast.makeText(context, "Turno solicitado para $nombre", Toast.LENGTH_SHORT).show()
 }
 
 @Composable
 fun VistaSolicitarTurno(modifier: Modifier = Modifier) {
     val context = LocalContext.current
+    var nombre by remember { mutableStateOf("") }
 
     Column(
         modifier = modifier
@@ -61,18 +67,32 @@ fun VistaSolicitarTurno(modifier: Modifier = Modifier) {
         )
         Spacer(modifier = Modifier.height(8.dp))
         Text(
-            text = "Presiona el botón para solicitar turno",
+            text = "Ingrese su nombre y presione el botón para solicitar turno",
             style = MaterialTheme.typography.bodyLarge
         )
         Spacer(modifier = Modifier.height(16.dp))
-        Button(
-            onClick = { crearTurno(context) },
+        TextField(
+            value = nombre,
+            onValueChange = { nombre = it },
+            label = { Text("Nombre") },
+            singleLine = true,
             modifier = Modifier.fillMaxWidth()
+        )
+        Spacer(modifier = Modifier.height(16.dp))
+        Button(
+            onClick = {
+                crearTurno(context, nombre)
+                nombre = "" // limpiar el campo después de enviar
+            },
+            modifier = Modifier.fillMaxWidth(),
+            enabled = nombre.isNotBlank() // desactiva si está vacío
         ) {
             Text(text = "Solicitar turno")
         }
     }
+
 }
+
 
 @Preview(showBackground = true)
 @Composable
