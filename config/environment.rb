@@ -1,5 +1,6 @@
-# Load the Rails application.
 require_relative "application"
 
-# Initialize the Rails application.
+# Evitar inicialización de ActiveRecord
+module ActiveRecord; end
+
 Rails.application.initialize!
