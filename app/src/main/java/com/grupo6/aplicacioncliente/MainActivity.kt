@@ -1,5 +1,6 @@
 package com.grupo6.aplicacioncliente
 
+import android.content.Context
 import android.os.Bundle
 import android.widget.Toast
 import androidx.activity.ComponentActivity
@@ -27,7 +28,12 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.grupo6.aplicacioncliente.network.ApiClient
+import com.grupo6.aplicacioncliente.network.TurnoRequest
 import com.grupo6.aplicacioncliente.ui.theme.AplicacionClienteTheme
+import retrofit2.Call
+import retrofit2.Callback
+import retrofit2.Response
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -44,9 +50,21 @@ class MainActivity : ComponentActivity() {
         }
     }
 }
-fun crearTurno(context: android.content.Context, nombre: String) {
-    // Aquí pondrías la lógica para consumir el servicio REST o enviar mensaje al backend.
-    Toast.makeText(context, "Turno solicitado para $nombre", Toast.LENGTH_SHORT).show()
+fun crearTurno(context: Context, nombre: String) {
+    val call = ApiClient.instance.crearTurno(TurnoRequest(nombre))
+    call.enqueue(object : Callback<Void> {
+        override fun onResponse(call: Call<Void>, response: Response<Void>) {
+            if (response.isSuccessful) {
+                Toast.makeText(context, "Turno solicitado para $nombre", Toast.LENGTH_SHORT).show()
+            } else {
+                Toast.makeText(context, "Error: ${response.code()}", Toast.LENGTH_SHORT).show()
+            }
+        }
+
+        override fun onFailure(call: Call<Void>, t: Throwable) {
+            Toast.makeText(context, "Fallo de red: ${t.message}", Toast.LENGTH_SHORT).show()
+        }
+    })
 }
 
 @Composable
