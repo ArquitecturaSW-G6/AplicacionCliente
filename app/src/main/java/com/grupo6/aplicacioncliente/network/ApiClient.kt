@@ -4,7 +4,6 @@ import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 
 object ApiClient {
-    // Ojo: ngrok genera un dominio nuevo cada vez
     private const val BASE_URL = "https://rejoiceful-lona-customarily.ngrok-free.dev/"
 
     val instance: ApiService by lazy {

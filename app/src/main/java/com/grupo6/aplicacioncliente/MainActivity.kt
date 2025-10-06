@@ -51,11 +51,10 @@ class MainActivity : ComponentActivity() {
     }
 }
 fun crearTurno(context: Context, nombre: String) {
-    // ⚡ Aquí pones valores simulados por ahora
     val turno = TurnoRequest(
         nombre = nombre,
-        servicio = "Consulta", // puedes hacer otro TextField si quieres
-        hora = "10:30"         // o tomar la hora del sistema
+        servicio = "Consulta",
+        hora = "10:30"
     )
 
     val call = ApiClient.instance.crearTurno(turno)
