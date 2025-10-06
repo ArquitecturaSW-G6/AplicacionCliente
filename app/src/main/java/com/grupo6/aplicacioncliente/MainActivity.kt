@@ -51,7 +51,14 @@ class MainActivity : ComponentActivity() {
     }
 }
 fun crearTurno(context: Context, nombre: String) {
-    val call = ApiClient.instance.crearTurno(TurnoRequest(nombre))
+    // ⚡ Aquí pones valores simulados por ahora
+    val turno = TurnoRequest(
+        nombre = nombre,
+        servicio = "Consulta", // puedes hacer otro TextField si quieres
+        hora = "10:30"         // o tomar la hora del sistema
+    )
+
+    val call = ApiClient.instance.crearTurno(turno)
     call.enqueue(object : Callback<Void> {
         override fun onResponse(call: Call<Void>, response: Response<Void>) {
             if (response.isSuccessful) {
@@ -66,6 +73,7 @@ fun crearTurno(context: Context, nombre: String) {
         }
     })
 }
+
 
 @Composable
 fun VistaSolicitarTurno(modifier: Modifier = Modifier) {
